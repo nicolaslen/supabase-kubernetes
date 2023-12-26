@@ -69,29 +69,44 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.db.secretName }}
-                  key: username
+                  key: DB_STORAGE_USER
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.db.secretName }}
-                  key: password
+                  key: DB_STORAGE_PASSWORD
             - name: DATABASE_URL
-              value: $(DB_DRIVER)://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?search_path=auth&sslmode=$(DB_SSL)
+              value: $(DB_DRIVER)://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?search_path=auth
             - name: PGRST_JWT_SECRET
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.jwt.secretName }}
-                  key: secret
+                  key: JWT_SECRET
             - name: ANON_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.jwt.secretName }}
-                  key: anonKey
+                  key: ANON_TOKEN
             - name: SERVICE_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.jwt.secretName }}
-                  key: serviceKey
+                  key: SERVICE_ROLE_TOKEN
+            - name: GLOBAL_S3_BUCKET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.s3.secretName }}
+                  key: SPACES_BUCKET
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.s3.secretName }}
+                  key: SPACES_KEY
+            - name: AWS_SECRET_ACCESS_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.s3.secretName }}
+                  key: SPACES_SECRET
           ports:
             - name: http
               containerPort: 5000
