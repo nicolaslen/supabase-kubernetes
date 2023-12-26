@@ -115,20 +115,19 @@ storage:
   image:
     repository: supabase/storage-api
     tag: v0.26.1
+    pullPolicy: IfNotPresent
   environment:
-    DB_HOST: demo-supabase-db.default.svc.cluster.local
+    DB_HOST: db.zhlhgviowjcuzlecywdv.supabase.co
     DB_PORT: "5432"
     DB_DRIVER: postgres
     DB_NAME: postgres
-    DB_SSL: disable
-    POSTGREST_URL: http://demo-supabase-rest.default.svc.cluster.local:3000
+    POSTGREST_URL: http://localhost:3000
     PGOPTIONS: -c search_path=storage,public
     FILE_SIZE_LIMIT: '52428800'
-    STORAGE_BACKEND: file
-    FILE_STORAGE_BACKEND_PATH: /var/lib/storage
-    TENANT_ID: stub
-    REGION: stub
-    GLOBAL_S3_BUCKET: stub
+    STORAGE_BACKEND: s3
+    TENANT_ID: cocos
+    REGION: us-east-1
+    NODE_ENV: production
   persistence: 
     enabled: false
     accessModes:
@@ -137,17 +136,36 @@ storage:
     storageClassName: standard
     annotations:
       helm.sh/resource-policy: "keep"
+  resources:
+    limits:
+      cpu: '1'
+      memory: 750Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  volumeMounts:
+    - name: aws-credentials
+      mountPath: /root/.aws/credentials
+      subPath: .aws
 
 kong:
   image:
     repository: kong
     tag: 2.8.1
+    pullPolicy: IfNotPresent
   environment:
     KONG_DATABASE: "off"
     KONG_DECLARATIVE_CONFIG: /home/kong/kong.yml
     KONG_DNS_ORDER: LAST,A,CNAME
     KONG_PLUGINS: request-transformer,cors,key-auth,acl,request-termination
     KONG_LOG_LEVEL: debug
+  resources:
+    limits:
+      cpu: '1'
+      memory: 512Mi
+    requests:
+      cpu: 200m
+      memory: 512Mi
 
   ingress:
     enabled: true
