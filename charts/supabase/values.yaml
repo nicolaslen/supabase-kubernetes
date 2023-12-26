@@ -103,8 +103,12 @@ realtime:
   enabled: false
 
 meta:
+  image:
+    repository: supabase/postgres-meta
+    tag: v0.75.0
+    pullPolicy: IfNotPresent
   environment:
-    DB_HOST: demo-supabase-db.default.svc.cluster.local
+    DB_HOST: db.zhlhgviowjcuzlecywdv.supabase.co
     DB_PORT: "5432"
     DB_DRIVER: postgres
     DB_NAME: postgres
