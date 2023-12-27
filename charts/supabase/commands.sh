@@ -1,3 +1,5 @@
+kubectl create namespace supa-upgrades
+
 # Create JWT secrets
 kubectl -n supa-upgrades create secret generic jwt-creds \
   --from-env-file=./secrets/.jwt

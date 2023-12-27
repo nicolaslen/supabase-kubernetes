@@ -8,7 +8,10 @@ aws:
   secretName: "aws-credentials-config"
 
 db:
+  enabled: false
   secretName: "db-creds"
+  persistence:
+    enabled: false
 
 studio:
   image:
@@ -84,6 +87,8 @@ auth:
       secret:
         secretName: aws-credentials-config
         defaultMode: 420
+  ingress:
+    enabled: false
 
 rest:
   image:
